@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - _global_</title>
+		<title>JsDoc Reference - signals.AsyncSignal</title>
 
         <link rel="stylesheet" href="../static/default.css" type="text/css" media="screen" charset="utf-8" />
 	</head>
@@ -51,6 +51,15 @@
         <div id="symbolList">
            <!-- constructor list -->
            
+             <h3>
+                 Class 
+             </h3>
+             <ul>
+                <li  class="fixedFont">
+                  <a href="../symbols/signals.AsyncSignal.html">AsyncSignal</a>
+                </li>
+             </ul>
+           
            <!-- end constructor list -->
 
            <!-- properties list -->
@@ -72,20 +81,69 @@
 		<div id="content">
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
-				Built-In Namespace _global_
+				Class signals.AsyncSignal
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/signals.Signal.html">signals.Signal</a>.<br />
+
+                    
+                        <dl class="inheritsList">
+                        <dt>Fields borrowed from class <a href="../symbols/signals.Signal.html">signals.Signal</a>: </dt><dd><a href="../symbols/signals.Signal.html#active">active</a></dd>
+                        </dl>
+                    
+
+                    
+                        <dl class="inheritsList">
+                        <dt>Methods borrowed from class <a href="../symbols/signals.Signal.html">signals.Signal</a>: </dt><dd><a href="../symbols/signals.Signal.html#add">add</a>, <a href="../symbols/signals.Signal.html#addOnce">addOnce</a>, <a href="../symbols/signals.Signal.html#dispatch">dispatch</a>, <a href="../symbols/signals.Signal.html#dispose">dispose</a>, <a href="../symbols/signals.Signal.html#getNumListeners">getNumListeners</a>, <a href="../symbols/signals.Signal.html#halt">halt</a>, <a href="../symbols/signals.Signal.html#remove">remove</a>, <a href="../symbols/signals.Signal.html#removeAll">removeAll</a>, <a href="../symbols/signals.Signal.html#toString">toString</a></dd>
+                        </dl>
+                    
+
+                    
+
 				
 			
 				
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/_Users_millermedeiros_Projects__open_source_js-signals_dist_signals.js.html">signals.js</a>.
+				
 			</p>
 
 <!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>signals.AsyncSignal</b>()
+				</div>
+				
+				<div class="description">
+					<p>The AsyncSignal is a special kind of Signal which will save
+a reference to previously dispatched messages and will execute
+binding during add/addOnce if Signal was previously dispatched.
+It will pass the latest dispatched value to the listener.</p>
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
 			
 
 <!-- ============================== field details ========================== -->		

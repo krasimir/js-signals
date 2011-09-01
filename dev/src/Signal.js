@@ -1,4 +1,4 @@
-/*global signals:true, SignalBinding:false*/
+/*global signals:false, SignalBinding:false*/
 
     // Signal --------------------------------------------------------
     //================================================================

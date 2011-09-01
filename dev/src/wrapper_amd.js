@@ -10,5 +10,7 @@ define(function(){
 
 //::SIGNAL_JS:://
 
-	return signals;
+//::ASYNC_SIGNAL_JS:://
+
+    return signals;
 });

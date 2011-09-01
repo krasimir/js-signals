@@ -9,5 +9,7 @@
 
 //::SIGNAL_JS:://
 
+//::ASYNC_SIGNAL_JS:://
+
 module.exports = signals;
 

@@ -10,6 +10,8 @@
 
 //::SIGNAL_JS:://
 
+//::ASYNC_SIGNAL_JS:://
+
 	global.signals = signals;
 	
 }(window || this));

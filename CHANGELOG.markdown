@@ -1,6 +1,12 @@
 # JS-Signals Changelog #
 
 
+## Next ##
+
+ - added `signals.AsyncSignal`. (issue #29)
+
+
+
 ## v0.6.3 (2011/07/11) ##
 
 ### Fixes ###
@@ -15,7 +21,6 @@
 
  - Removed:
    - `SignalBinding.prototype.dispose()` (issue #27)
-
 
 ### Other ###
 

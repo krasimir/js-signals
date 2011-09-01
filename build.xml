@@ -29,6 +29,7 @@
 		<loadfile property="signals.js" srcFile="${src.dir}/signals.js"/>
 		<loadfile property="SignalBinding.js" srcFile="${src.dir}/SignalBinding.js"/>
 		<loadfile property="Signal.js" srcFile="${src.dir}/Signal.js"/>
+		<loadfile property="AsyncSignal.js" srcFile="${src.dir}/AsyncSignal.js"/>
 		
 		<copy file="${src.dir}/wrapper_closure.js" tofile="${dist.dir}/${dist.name}" />	
 		<copy file="${src.dir}/wrapper_amd.js" tofile="${dist.dir}/${dist.amd.name}" />
@@ -40,6 +41,7 @@
 			<replacefilter token="//::SIGNALS_JS:://" value="${signals.js}" />
 			<replacefilter token="//::SIGNAL_BINDING_JS:://" value="${SignalBinding.js}" />
 			<replacefilter token="//::SIGNAL_JS:://" value="${Signal.js}" />
+			<replacefilter token="//::ASYNC_SIGNAL_JS:://" value="${AsyncSignal.js}" />
 			<!-- version number, build number/date should come after other replaces -->
 			<replacefilter token="::VERSION_NUMBER::" value="${version.number}" />
 			<replacefilter token="::BUILD_NUMBER::" value="${build.number}" />
