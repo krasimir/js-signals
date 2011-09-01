@@ -4,39 +4,34 @@
 
     (function(){
 
-        //create a local reference to be used as super (since we need to call
-        //methods on signals.Signal.prototype)
-        var _super = signals.Signal.prototype;
+        var _signalProto = signals.Signal.prototype;
+
 
         function AsyncSignal(){
             signals.Signal.call(this);
             this._prevParams = null;
         }
-        //create a new instance to avoid overwritting Signal prototype
         AsyncSignal.prototype = new signals.Signal();
 
-        function executeBinding(binding, params){
-            if(! params){
-                return;
-            }
-            binding.execute(params);
+        function getProxiedAdd(fnName){
+            //to avoid code duplication generate function dynamically
+            //since `add` and `addOnce` are so similar
+            return function(listener, scope, priority){
+                 var binding = _signalProto[fnName].call(this, listener, scope, priority);
+                 if(this._prevParams){
+                    binding.execute(this._prevParams);
+                 }
+                 return binding;
+            };
         }
 
-        AsyncSignal.prototype.add = function(listener, scope, priority){
-            var b = _super.add.call(this, listener, scope, priority);
-            executeBinding(b, this._prevParams);
-            return b;
-        };
+        AsyncSignal.prototype.add = getProxiedAdd('add');
 
-        AsyncSignal.prototype.addOnce = function(listener, scope, priority){
-            var b = _super.addOnce.call(this, listener, scope, priority);
-            executeBinding(b, this._prevParams);
-            return b;
-        };
+        AsyncSignal.prototype.addOnce = getProxiedAdd('addOnce');
 
         AsyncSignal.prototype.dispatch = function(params){
             this._prevParams = Array.prototype.slice.call(arguments);
-            _super.dispatch.apply(this, this._prevParams);
+            _signalProto.dispatch.apply(this, this._prevParams);
         };
 
         AsyncSignal.prototype.toString = function(){
