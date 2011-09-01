@@ -1,17 +1,21 @@
 /*global signals:false, SignalBinding:false, inheritPrototype:false*/
 
-    // AsyncSignal
+    // AsyncSignal ---------------------------------------------------
+    //================================================================
 
     (function(){
 
-        var _signalProto = signals.Signal.prototype;
+        var _signalProto = signals.Signal.prototype,
+            _asyncProto = new signals.Signal();
 
+        //delete _bindings since it isn't used and would "break" dispose
+        delete _asyncProto._bindings;
 
         function AsyncSignal(){
             signals.Signal.call(this);
             this._prevParams = null;
         }
-        AsyncSignal.prototype = new signals.Signal();
+        AsyncSignal.prototype = _asyncProto;
 
         function getProxiedAdd(fnName){
             //to avoid code duplication generate function dynamically
@@ -25,25 +29,29 @@
             };
         }
 
-        AsyncSignal.prototype.add = getProxiedAdd('add');
+        _asyncProto.add = getProxiedAdd('add');
 
-        AsyncSignal.prototype.addOnce = getProxiedAdd('addOnce');
+        _asyncProto.addOnce = getProxiedAdd('addOnce');
 
-        AsyncSignal.prototype.dispatch = function(params){
+        _asyncProto.dispatch = function(params){
             this._prevParams = Array.prototype.slice.call(arguments);
             _signalProto.dispatch.apply(this, this._prevParams);
         };
 
-        AsyncSignal.prototype.toString = function(){
-            return '[AsyncSignal active:'+ this.active +' numListeners:'+ this.getNumListeners() +']';
+        _asyncProto.dispose = function(){
+            _signalProto.dispose.call(this);
+            delete this._prevParams;
         };
 
+        _asyncProto.toString = function(){
+            return '[AsyncSignal active:'+ this.active +' numListeners:'+ this.getNumListeners() +']';
+        };
 
         /**
          * The AsyncSignal is a special kind of Signal which will save
          * a reference to previously dispatched messages and will execute
          * binding during add/addOnce if Signal was previously dispatched.
-         * It will pass the latest dispatched value to the listener.
+         * The API is exactly the same of a regular Signal.
          * @constructor
          * @extends signals.Signal
          */

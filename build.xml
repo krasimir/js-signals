@@ -22,7 +22,7 @@
 		<buildnumber file="${build.dir}/build.number"/>
 		
 		<tstamp>
-			<format property="build.date" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
+            <format property="build.date" pattern="yyyy/MM/dd hh:mm aa" unit="hour"/>
 		</tstamp>
 		
 		<loadfile property="license.txt" srcFile="${src.dir}/license.txt"/>
