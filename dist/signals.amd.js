@@ -6,7 +6,7 @@
  * Released under the MIT license <http://www.opensource.org/licenses/mit-license.php>
  * @author Miller Medeiros <http://millermedeiros.com/>
  * @version 0.6.3
- * @build 203 (2011/09/01 01:04 PM)
+ * @build 213 (2011/10/07 09:16 PM)
  */
 define(function(){
 
@@ -375,21 +375,31 @@ define(function(){
         //delete _bindings since it isn't used and would "break" dispose
         delete _asyncProto._bindings;
 
+        /**
+         * The AsyncSignal is a special kind of Signal which will save
+         * a reference to previously dispatched messages and will execute
+         * binding during add/addOnce if Signal was previously dispatched.
+         * @name signals.AsyncSignal
+         * @constructor
+         * @extends signals.Signal
+         */
         function AsyncSignal(){
             signals.Signal.call(this);
             this._prevParams = null;
         }
+
         AsyncSignal.prototype = _asyncProto;
 
         function getProxiedAdd(fnName){
             //to avoid code duplication generate function dynamically
             //since `add` and `addOnce` are so similar
-            return function(listener, scope, priority){
-                 var binding = _signalProto[fnName].call(this, listener, scope, priority);
-                 if(this._prevParams){
+            return function(){
+                var binding = _signalProto[fnName].apply(this, arguments);
+                //_prevParams becomes an Array after first dispatch
+                if(this._prevParams){
                     binding.execute(this._prevParams);
-                 }
-                 return binding;
+                }
+                return binding;
             };
         }
 
@@ -402,6 +412,15 @@ define(function(){
             _signalProto.dispatch.apply(this, this._prevParams);
         };
 
+        /**
+         * Reset AsyncSignal to state before first dispatch, so it won't be
+         * automatically dispatched on the next add/addOnce.
+         * @name signals.AsyncSignal.prototype.reset
+         */
+        _asyncProto.reset = function(){
+            this._prevParams = null;
+        };
+
         _asyncProto.dispose = function(){
             _signalProto.dispose.call(this);
             delete this._prevParams;
@@ -411,14 +430,6 @@ define(function(){
             return '[AsyncSignal active:'+ this.active +' numListeners:'+ this.getNumListeners() +']';
         };
 
-        /**
-         * The AsyncSignal is a special kind of Signal which will save
-         * a reference to previously dispatched messages and will execute
-         * binding during add/addOnce if Signal was previously dispatched.
-         * The API is exactly the same of a regular Signal.
-         * @constructor
-         * @extends signals.Signal
-         */
         signals.AsyncSignal = AsyncSignal;
 
     }());

@@ -13,7 +13,7 @@
 <span class='line'>  6</span>  * Released under the MIT license &lt;http://www.opensource.org/licenses/mit-license.php>
 <span class='line'>  7</span>  * @author Miller Medeiros &lt;http://millermedeiros.com/>
 <span class='line'>  8</span>  * @version 0.6.3
-<span class='line'>  9</span>  * @build 198 (09/01/2011 04:22 AM)
+<span class='line'>  9</span>  * @build 213 (2011/10/07 09:16 PM)
 <span class='line'> 10</span>  */</span><span class="WHIT">
 <span class='line'> 11</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">global</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 12</span> </span><span class="WHIT">	
@@ -371,64 +371,78 @@
 <span class='line'>364</span> 
 <span class='line'>365</span> </span><span class="COMM">/*global signals:false, SignalBinding:false, inheritPrototype:false*/</span><span class="WHIT">
 <span class='line'>366</span> 
-<span class='line'>367</span> </span><span class="WHIT">    </span><span class="COMM">// AsyncSignal</span><span class="WHIT">
-<span class='line'>368</span> 
-<span class='line'>369</span> </span><span class="WHIT">    </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>370</span> 
-<span class='line'>371</span> </span><span class="WHIT">        </span><span class="COMM">//create a local reference to be used as super (since we need to call</span><span class="WHIT">
-<span class='line'>372</span> </span><span class="WHIT">        </span><span class="COMM">//methods on signals.Signal.prototype)</span><span class="WHIT">
-<span class='line'>373</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_super</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">signals.Signal.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="WHIT">    </span><span class="COMM">// AsyncSignal ---------------------------------------------------</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="WHIT">    </span><span class="COMM">//================================================================</span><span class="WHIT">
+<span class='line'>369</span> 
+<span class='line'>370</span> </span><span class="WHIT">    </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>371</span> 
+<span class='line'>372</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_signalProto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">signals.Signal.prototype</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">            </span><span class="NAME">_asyncProto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">signals.Signal</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>374</span> 
-<span class='line'>375</span> </span><span class="WHIT">        </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">AsyncSignal</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>376</span> </span><span class="WHIT">            </span><span class="NAME">signals.Signal.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>377</span> </span><span class="WHIT">            </span><span class="NAME">this._prevParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>378</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>379</span> </span><span class="WHIT">        </span><span class="COMM">//create a new instance to avoid overwritting Signal prototype</span><span class="WHIT">
-<span class='line'>380</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">signals.Signal</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>381</span> 
-<span class='line'>382</span> </span><span class="WHIT">        </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">executeBinding</span><span class="PUNC">(</span><span class="NAME">binding</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>383</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>384</span> </span><span class="WHIT">                </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>385</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>386</span> </span><span class="WHIT">            </span><span class="NAME">binding.execute</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>387</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>388</span> 
-<span class='line'>389</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype.add</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">listener</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scope</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>390</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">b</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_super.add.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scope</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>391</span> </span><span class="WHIT">            </span><span class="NAME">executeBinding</span><span class="PUNC">(</span><span class="NAME">b</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>392</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">b</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>393</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>394</span> 
-<span class='line'>395</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype.addOnce</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">listener</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scope</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>396</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">b</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_super.addOnce.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scope</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>397</span> </span><span class="WHIT">            </span><span class="NAME">executeBinding</span><span class="PUNC">(</span><span class="NAME">b</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>398</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">b</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>399</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>400</span> 
-<span class='line'>401</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype.dispatch</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>402</span> </span><span class="WHIT">            </span><span class="NAME">this._prevParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>403</span> </span><span class="WHIT">            </span><span class="NAME">_super.dispatch.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>404</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">        </span><span class="COMM">//delete _bindings since it isn't used and would "break" dispose</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">        </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">_asyncProto._bindings</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span> 
+<span class='line'>378</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>379</span>          * The AsyncSignal is a special kind of Signal which will save
+<span class='line'>380</span>          * a reference to previously dispatched messages and will execute
+<span class='line'>381</span>          * binding during add/addOnce if Signal was previously dispatched.
+<span class='line'>382</span>          * @name signals.AsyncSignal
+<span class='line'>383</span>          * @constructor
+<span class='line'>384</span>          * @extends signals.Signal
+<span class='line'>385</span>          */</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">        </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">AsyncSignal</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">            </span><span class="NAME">signals.Signal.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">            </span><span class="NAME">this._prevParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>390</span> 
+<span class='line'>391</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_asyncProto</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>392</span> 
+<span class='line'>393</span> </span><span class="WHIT">        </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getProxiedAdd</span><span class="PUNC">(</span><span class="NAME">fnName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">            </span><span class="COMM">//to avoid code duplication generate function dynamically</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">            </span><span class="COMM">//since `add` and `addOnce` are so similar</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_signalProto</span><span class="PUNC">[</span><span class="NAME">fnName</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="WHIT">                </span><span class="COMM">//_prevParams becomes an Array after first dispatch</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">                    </span><span class="NAME">binding.execute</span><span class="PUNC">(</span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="WHIT">                </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">binding</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>405</span> 
-<span class='line'>406</span> </span><span class="WHIT">        </span><span class="NAME">AsyncSignal.prototype.toString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>407</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">'[AsyncSignal active:'</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.active</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">' numListeners:'</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getNumListeners</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">']'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>408</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.add</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getProxiedAdd</span><span class="PUNC">(</span><span class="STRN">'add'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>407</span> 
+<span class='line'>408</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.addOnce</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getProxiedAdd</span><span class="PUNC">(</span><span class="STRN">'addOnce'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>409</span> 
-<span class='line'>410</span> 
-<span class='line'>411</span> </span><span class="WHIT">        </span><span class="COMM">/**
-<span class='line'>412</span>          * The AsyncSignal is a special kind of Signal which will save
-<span class='line'>413</span>          * a reference to previously dispatched messages and will execute
-<span class='line'>414</span>          * binding during add/addOnce if Signal was previously dispatched.
-<span class='line'>415</span>          * It will pass the latest dispatched value to the listener.
-<span class='line'>416</span>          * @constructor
-<span class='line'>417</span>          * @extends signals.Signal
-<span class='line'>418</span>          */</span><span class="WHIT">
-<span class='line'>419</span> </span><span class="WHIT">        </span><span class="NAME">signals.AsyncSignal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">AsyncSignal</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>420</span> 
-<span class='line'>421</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>422</span> 
+<span class='line'>410</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.dispatch</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="WHIT">            </span><span class="NAME">this._prevParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="WHIT">            </span><span class="NAME">_signalProto.dispatch.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._prevParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>414</span> 
+<span class='line'>415</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'>416</span>          * Reset AsyncSignal to state before first dispatch, so it won't be
+<span class='line'>417</span>          * automatically dispatched on the next add/addOnce.
+<span class='line'>418</span>          * @name signals.AsyncSignal.prototype.reset
+<span class='line'>419</span>          */</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.reset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">            </span><span class="NAME">this._prevParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>423</span> 
-<span class='line'>424</span> </span><span class="WHIT">	</span><span class="NAME">global.signals</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">signals</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>425</span> </span><span class="WHIT">	
-<span class='line'>426</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="NAME">window</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>427</span> </span></pre></body></html>
+<span class='line'>424</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.dispose</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">            </span><span class="NAME">_signalProto.dispose.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">            </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">this._prevParams</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> 
+<span class='line'>429</span> </span><span class="WHIT">        </span><span class="NAME">_asyncProto.toString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">'[AsyncSignal active:'</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.active</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">' numListeners:'</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getNumListeners</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="STRN">']'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>432</span> 
+<span class='line'>433</span> </span><span class="WHIT">        </span><span class="NAME">signals.AsyncSignal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">AsyncSignal</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>434</span> 
+<span class='line'>435</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>436</span> 
+<span class='line'>437</span> 
+<span class='line'>438</span> </span><span class="WHIT">	</span><span class="NAME">global.signals</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">signals</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">	
+<span class='line'>440</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="NAME">window</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> </span></pre></body></html>
